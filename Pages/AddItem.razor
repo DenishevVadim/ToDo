@@ -1,0 +1,32 @@
+﻿@page "/add"
+@using TODO_List.Infrastructure.Services
+@using TODO_List.Models.ViewModels 
+@inject TodoService service
+
+<h3>AddItem</h3>
+<div class="container">
+    <div class="align-items-baseline">
+        <label>Введите задачу: </label>
+        <input type="text" @bind="@newItem.Content" />
+    </div>
+    <div class="align-items-baseline">
+        <NavLink  @onclick="() => Add()" href="TodoList" class="btn btn-success">Добавить</NavLink>
+    </div>
+</div>
+@code {
+    TodoItemVM newItem = new TodoItemVM();
+
+    // Блазорский костыль
+    public int MaxId() => service.Get().Select(i => i.Id).Max();
+
+    public void Add()
+    {
+        int id = MaxId();
+
+        newItem.Id = id;
+        newItem.IsExecute = false; // вроде как он по умолчанию тоже false
+
+        service.Add(newItem);
+
+    }
+}

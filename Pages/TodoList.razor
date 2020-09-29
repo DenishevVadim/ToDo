@@ -1,0 +1,44 @@
+﻿@page "/todolist"
+
+@using TODO_List.Infrastructure.Services
+@inject TodoService service
+
+<h3>TodoList</h3>
+
+<div>
+    <a href="add" class="btn btn-success">Add</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <label>Id</label>
+            </th>
+            <th>
+                <label>Content</label>
+            </th>
+            <th>
+                <label>Completed</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in service.Get())
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Content</td>
+                <td><input type="checkbox" @bind="@item.IsExecute" /></td>
+                <a @onclick="() => Delete(item.Id)" class="btn btn-danger">Delete</a>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+    void Delete(int id)
+    {
+        service.RemoveAt(id);
+    }
+}
